@@ -1,4 +1,6 @@
-﻿namespace AbstractFactory
+﻿using System;
+
+namespace AbstractFactory
 {
     public abstract class AbstractFactory
     {
@@ -10,8 +12,9 @@
                     return new EmberFactory();
                 case Architecture.Ember:
                     return new EnginolaFactory();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(architecture), architecture, null);
             }
-            return null;
         }
 
         public abstract Cpu CreateCpu();
