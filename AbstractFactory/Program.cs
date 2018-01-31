@@ -14,8 +14,8 @@ namespace AbstractFactory
             new DemoWhenToConsiderFactoryPattern(carName);
             new SimpleFactoryPattern(carName);
             new FactoryMethodPattern(carName);
+            new AbstractFactoryPattern(carName);
         }
-
     }
 
     #region Demo when to use factory pattern
@@ -30,7 +30,7 @@ namespace AbstractFactory
             switch (carName)
             {
                 case "bmw":
-                    return new Bmw335Xi();
+                    return new Bmw335Xi("bmw x5");
                 case "mini":
                     return new Mini();
                 // if we want to add a new car like Audi,
@@ -182,10 +182,137 @@ Simple Factory
 
     #endregion
 
-
     #region Abstract Factory
 
+    /*
+     Provide an interface for creating families of related or dipendent objects without specifying
+     their concrete classes.
+     -Factories create different types of concrete objects
+     - A factory now represents a "family" of objects that it can create
+     - Factories may have more than one factory method
 
+    We could use it for creating different db connections for example sql, mongo...
+
+        Consequences:
+        - Add a new factories and classes without breaking OCP
+        - Defer chosing classes to classes that specialize in making that decision
+        - Using private or internal constructors hides direct construction with the new keyword
+     */
+
+    class AbstractFactoryPattern
+    {
+
+        public AbstractFactoryPattern(string carName)
+        {
+            IAutoFactory factory = LoadFactories();
+        }
+
+        private IAutoFactory LoadFactories()
+        {
+            return new MiniFactory();
+            // todo move to configuration
+            //var factoryName = "MiniCooperFactory";
+
+            //return Assembly.GetEntryAssembly().CreateInstance(factoryName) as IAutoFactory;
+        }
+
+        interface IAutoFactory
+        {
+            IAuto CreateSportsCar();
+            IAuto CreateLuxuryCar();
+        }
+
+        // in this case we set up object the way we want
+        class MiniFactory : IAutoFactory
+        {
+            public IAuto CreateSportsCar()
+            {
+                return new MiniCooper();
+            }
+
+            public IAuto CreateLuxuryCar()
+            {
+                var car = new MiniCooper();
+                car.SetLuxuryPacket();
+                return car;
+            }
+        }
+
+        // In this case we return different objects
+        class BmwFactory : IAutoFactory
+        {
+            public IAuto CreateSportsCar()
+            {
+                return new BmwSport();
+            }
+
+            public IAuto CreateLuxuryCar()
+            {
+                return new BmwLuxury();
+            }
+        }
+
+        class BmwSport : IAuto
+        {
+            public string Name { get; }
+            public void SetName(string name)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOff()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOn()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        class BmwLuxury : IAuto
+        {
+            public string Name { get; }
+            public void SetName(string name)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOff()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOn()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        class MiniCooper : IAuto
+        {
+            public string Name { get; }
+            public void SetName(string name)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOff()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void TurnOn()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void SetLuxuryPacket()
+            {
+                //set
+            }
+        }
+    }
 
     #endregion
 
