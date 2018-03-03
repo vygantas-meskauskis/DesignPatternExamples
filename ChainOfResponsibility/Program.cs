@@ -28,6 +28,10 @@ namespace ChainOfResponsibility
     - Reduce coupling
     - Dynamicaly manage the message handlers
     - End of chain behavior can be defined appropriately
+
+    Related Patterns:
+    Composite,
+    Tree of Responsibility
      */
     class Program
     {
